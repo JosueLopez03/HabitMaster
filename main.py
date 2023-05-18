@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
+import json
 
 app = Flask(__name__)
 
@@ -47,16 +48,17 @@ def add_habit():
 
     return redirect(url_for('index'))
 
-@app.route('/complete/<int:habit_id>')
-def complete_habit(habit_id):
-    # Update habit completion status in the database
+@app.route('/delete/<int:habit_id>', methods=['POST'])
+def delete_habit(habit_id):
+    # Delete habit from the database
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    c.execute('UPDATE habits SET completed = 1 WHERE id = ?', (habit_id,))
+    c.execute('DELETE FROM habits WHERE id = ?', (habit_id,))
     conn.commit()
     conn.close()
 
-    return redirect(url_for('index'))
+    return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
+
 
 # Main
 if __name__ == '__main__':
