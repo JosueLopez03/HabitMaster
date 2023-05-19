@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HabitMaster</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: left;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        li label {
+            margin-left: 10px;
+        }
+    </style>
+    <script>
+        function deleteHabit(habitId) {
+            // Send an AJAX request to delete the habit
+            fetch(`/delete/${habitId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Refresh the page to reflect the changes
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Rise to the Top through Habit Tracking and Gamification</h1>
+        <h2>Your Habits:</h2>
+
+        <ul>
+            {% for habit in habits %}
+            <li>
+                <input type="checkbox" id="habit_{{ habit[0] }}" {% if habit[2] == 1 %}checked{% endif %} onchange=deleteHabit(habit[0])>
+                <label for="habit_{{ habit[0] }}">{{ habit[1] }}</label>
+            </li>
+            {% endfor %}
+        </ul>
+        
+        <h2>Add a New Habit:</h2>
+        <form action="{{ url_for('add_habit') }}" method="post">
+            <input type="text" name="habit_name" required>
+            <button type="submit">Add Habit</button>
+        </form>
+    </div>
+</body>
+</html>
