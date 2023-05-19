@@ -23,6 +23,21 @@ def create_database():
     conn.commit()
     conn.close()
 
+class Player:
+    def __init__(self):
+        self.habits = []
+
+    def add_habit(self, habit_name):
+        self.habits.append(habit_name)
+
+    def delete_habit(self, habit_name):
+        self.habits.remove(habit_name)
+
+    def get_habits(self):
+        return self.habits
+
+player = Player()
+
 # Routes
 @app.route('/')
 def index():
