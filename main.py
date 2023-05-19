@@ -1,6 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 import sqlite3
-import json
 
 app = Flask(__name__)
 
@@ -42,11 +41,10 @@ player = Player()
 @app.route('/')
 def index():
     # Retrieve habits from the database
-    conn = sqlite3.connect(DB_NAME)
-    c = conn.cursor()
-    c.execute('SELECT * FROM habits')
-    habits = c.fetchall()
-    conn.close()
+    with sqlite3.connect(DB_NAME) as conn:
+        c = conn.cursor()
+        c.execute('SELECT * FROM habits')
+        habits = c.fetchall()
 
     return render_template('index.html', habits=habits)
 
@@ -55,11 +53,10 @@ def add_habit():
     habit_name = request.form.get('habit_name')
 
     # Insert new habit into the database
-    conn = sqlite3.connect(DB_NAME)
-    c = conn.cursor()
-    c.execute('INSERT INTO habits (name) VALUES (?)', (habit_name,))
-    conn.commit()
-    conn.close()
+    with sqlite3.connect(DB_NAME) as conn:
+        c = conn.cursor()
+        c.execute('INSERT INTO habits (name) VALUES (?)', (habit_name,))
+        conn.commit()
 
     return redirect(url_for('index'))
 
@@ -72,7 +69,7 @@ def delete_habit(habit_id):
     conn.commit()
     conn.close()
 
-    return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
+    return jsonify({'success': True})
 
 @app.route('/complete/<int:habit_id>', methods=['POST'])
 def complete_habit(habit_id):
@@ -85,7 +82,7 @@ def complete_habit(habit_id):
     conn.commit()
     conn.close()
 
-    return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
+    return jsonify({'success': True})
 
 
 # Main
