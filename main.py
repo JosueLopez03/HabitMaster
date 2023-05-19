@@ -37,6 +37,8 @@ def create_database():
 class Player:
     def __init__(self):
         self.habits = []
+        self.level = 1
+        self.experience = 0
 
     def add_habit(self, habit_name):
         self.habits.append(habit_name)
@@ -46,6 +48,19 @@ class Player:
 
     def get_habits(self):
         return self.habits
+
+    def increase_experience(self):
+        self.experience += 1
+        if self.experience >= self.level * 100:  # Level up when experience reaches the required threshold
+            self.level += 1
+            self.experience = 0
+
+    def get_level(self):
+        return self.level
+
+    def get_experience(self):
+        return self.experience
+
 
 player = Player()
 
@@ -58,7 +73,7 @@ def index():
         c.execute('SELECT * FROM habits')
         habits = c.fetchall()
 
-    return render_template('index.html', habits=habits, top_habits=TOP_HABITS, enumerate=enumerate)
+    return render_template('index.html', habits=habits, top_habits=TOP_HABITS, enumerate=enumerate, player=player)
 
 @app.route('/add', methods=['POST'])
 def add_habit():
@@ -80,6 +95,20 @@ def add_habit():
 
 @app.route('/delete/<int:habit_id>', methods=['POST'])
 def delete_habit(habit_id):
+    # Delete habit from the database
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    c.execute('DELETE FROM habits WHERE id = ?', (habit_id,))
+    conn.commit()
+    conn.close()
+
+    return jsonify({'success': True})
+
+@app.route('/increase_experience/<int:habit_id>', methods=['POST'])
+def increase_experience(habit_id):
+    # Increase the player's experience
+    player.increase_experience()
+
     # Delete habit from the database
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
