@@ -59,6 +59,19 @@ def delete_habit(habit_id):
 
     return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
 
+@app.route('/complete/<int:habit_id>', methods=['POST'])
+def complete_habit(habit_id):
+    completed = request.form.get('completed')
+
+    # Update habit completion status in the database
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    c.execute('UPDATE habits SET completed = ? WHERE id = ?', (completed, habit_id))
+    conn.commit()
+    conn.close()
+
+    return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
+
 
 # Main
 if __name__ == '__main__':

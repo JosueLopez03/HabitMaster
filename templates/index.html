@@ -55,13 +55,14 @@
         <ul>
             {% for habit in habits %}
             <li>
-                <input type="checkbox" id="habit_{{ habit[0] }}" {% if habit[2] == 1 %}checked{% endif %} onchange=deleteHabit(habit[0])>
+                <input type="checkbox" id="habit_{{ habit[0] }}" {% if habit[2] == 1 %}checked{% endif %} onchange="deleteHabit('{{ habit[0] }}')">
                 <label for="habit_{{ habit[0] }}">{{ habit[1] }}</label>
             </li>
             {% endfor %}
         </ul>
-        
+
         <h2>Add a New Habit:</h2>
+
         <form action="{{ url_for('add_habit') }}" method="post">
             <input type="text" name="habit_name" required>
             <button type="submit">Add Habit</button>
