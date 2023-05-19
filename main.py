@@ -6,6 +6,18 @@ app = Flask(__name__)
 # Database setup
 DB_NAME = 'habitmaster.db'
 
+TOP_HABITS = [
+    "Exercise for 60 minutes",
+    "Eat a balance meal",
+    "Drink recommended amount of water",
+    "Sleep for 7-9 hours",
+    "Practice a stress management activity",
+    "Pracitce good hygiene",
+    "Limit social media",
+    "Engage in a hobby for 30 minutes",
+    "Practice a new skill"
+]
+
 def create_database():
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
@@ -46,17 +58,23 @@ def index():
         c.execute('SELECT * FROM habits')
         habits = c.fetchall()
 
-    return render_template('index.html', habits=habits)
+    return render_template('index.html', habits=habits, top_habits=TOP_HABITS, enumerate=enumerate)
 
 @app.route('/add', methods=['POST'])
 def add_habit():
-    habit_name = request.form.get('habit_name')
+    selected_habit_index = int(request.form.get('habit_index'))
+
+    if selected_habit_index < 0 or selected_habit_index >= len(TOP_HABITS):
+        return redirect(url_for('index'))
+
+    habit_name = TOP_HABITS[selected_habit_index]
 
     # Insert new habit into the database
-    with sqlite3.connect(DB_NAME) as conn:
-        c = conn.cursor()
-        c.execute('INSERT INTO habits (name) VALUES (?)', (habit_name,))
-        conn.commit()
+    conn = sqlite3.connect(DB_NAME)
+    c = conn.cursor()
+    c.execute('INSERT INTO habits (name) VALUES (?)', (habit_name,))
+    conn.commit()
+    conn.close()
 
     return redirect(url_for('index'))
 
@@ -78,7 +96,7 @@ def complete_habit(habit_id):
     # Update habit completion status in the database
     conn = sqlite3.connect(DB_NAME)
     c = conn.cursor()
-    c.execute('UPDATE habits SET completed = ? WHERE id = ?', (completed, habit_id))
+    c.execute('UPDATE habits SET completed = ? WHERE id = ?', (int(completed), habit_id))
     conn.commit()
     conn.close()
 

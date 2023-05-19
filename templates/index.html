@@ -64,9 +64,13 @@
         <h2>Add a New Habit:</h2>
 
         <form action="{{ url_for('add_habit') }}" method="post">
-            <input type="text" name="habit_name" required>
+            <select name="habit_index" required>
+                {% for index, habit in enumerate(top_habits) %}
+                    <option value="{{ index }}">{{ habit }}</option>
+                {% endfor %}
+            </select>            
             <button type="submit">Add Habit</button>
-        </form>
+        </form>        
     </div>
 </body>
 </html>
