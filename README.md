@@ -1,2 +1,2 @@
 # HabitMaster
-Rise to the Top through habit tracking and gamification.
+Rise to the top through habit tracking and gamification.
