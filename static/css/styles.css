@@ -68,3 +68,46 @@ button:hover {
 .level-container span {
     margin-right: 10px;
 }
+
+/* ... style for calendar ... */
+
+.container {
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+table {
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ccc;
+}
+
+.other-month {
+    color: #ccc;
+}
+
+.day {
+    position: relative;
+    height: 100%;
+}
+
+.date {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.habit {
+    display: block;
+    margin-top: 5px;
+    font-size: 12px;
+}
+

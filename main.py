@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 import sqlite3
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -130,6 +131,15 @@ def complete_habit(habit_id):
     conn.close()
 
     return jsonify({'success': True})
+
+# Add a new route for rendering the calendar
+@app.route('/calendar')
+def calendar():
+    # Get the current year and month
+    now = datetime.now()
+    year = now.year
+    month = now.month
+    return render_template('calendar.html', year=year, month=month)
 
 
 # Main
