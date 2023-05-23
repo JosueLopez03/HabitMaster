@@ -3,8 +3,39 @@
 <head>
     <title>HabitMaster - Calendar</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            text-align: center;
+        }
+        .header {
+            margin-bottom: 20px;
+        }
+        .calendar {
+            flex-grow: 1;
+            margin-bottom: 20px;
+        }
+        .habits,
+        .add-habit {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-    <h1>Calendar</h1>
-    <h2>{{ month_name }} {{ year }}</h2>
+    <div class="container">
+        <div class="header">
+            <h1>Rise to the Top through Habit Tracking and Gamification</h1>
+        </div>
+
+        <div class="calendar">
+            <h1>Calendar</h1>
+            <h2>{{ month_name }} {{ year }}</h2>
