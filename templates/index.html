@@ -26,6 +26,16 @@
         li label {
             margin-left: 10px;
         }
+
+        /* Player Info */
+        .level-container {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .level-container span {
+            margin-right: 10px;
+        }
     </style>
     <script>
         function deleteHabit(habitId) {
@@ -38,34 +48,60 @@
             })
             .then(response => response.json())
             .then(data => {
-                // Refresh the page to reflect the changes
-                location.reload();
+                // Call the increase_experience() function
+                fetch(`/increase_experience/${habitId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Experience increased!');
+                    // Refresh the page to reflect the changes
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
             })
             .catch(error => {
                 console.error('Error:', error);
             });
         }
-    </script>
+    </script>    
 </head>
 <body>
     <div class="container">
         <h1>Rise to the Top through Habit Tracking and Gamification</h1>
+
+        <!-- Display player level and experience -->
+        <div class="level-container">
+            <span>Level: {{ player.get_level() }}</span>
+            <span>Experience: {{ player.get_experience() }}</span>
+        </div>
+
         <h2>Your Habits:</h2>
 
         <ul>
             {% for habit in habits %}
             <li>
-                <input type="checkbox" id="habit_{{ habit[0] }}" {% if habit[2] == 1 %}checked{% endif %} onchange=deleteHabit(habit[0])>
+                <input type="checkbox" id="habit_{{ habit[0] }}" {% if habit[2] == 1 %}checked{% endif %} onchange="deleteHabit('{{ habit[0] }}')">
                 <label for="habit_{{ habit[0] }}">{{ habit[1] }}</label>
             </li>
             {% endfor %}
         </ul>
-        
+
         <h2>Add a New Habit:</h2>
+
         <form action="{{ url_for('add_habit') }}" method="post">
-            <input type="text" name="habit_name" required>
+            <select name="habit_index" required>
+                {% for index, habit in enumerate(top_habits) %}
+                    <option value="{{ index }}">{{ habit }}</option>
+                {% endfor %}
+            </select>            
             <button type="submit">Add Habit</button>
-        </form>
+        </form>        
     </div>
 </body>
 </html>
