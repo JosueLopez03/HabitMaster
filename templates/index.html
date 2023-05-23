@@ -6,35 +6,22 @@
     <style>
         body {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
             margin: 0;
         }
-        .container {
-            text-align: left;
+        .header {
+            margin-bottom: 20px;
         }
-        ul {
-            list-style-type: none;
-            padding: 0;
+        .calendar {
+            margin-bottom: 20px;
         }
-        li {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        li label {
-            margin-left: 10px;
-        }
-
-        /* Player Info */
-        .level-container {
-            margin-top: 20px;
-            font-weight: bold;
-        }
-
-        .level-container span {
-            margin-right: 10px;
+        .habits,
+        .add-habit {
+            margin-top: auto;
+            margin-bottom: 20px;
         }
     </style>
     <script>
@@ -73,35 +60,35 @@
 </head>
 <body>
     <div class="container">
-        <h1>Rise to the Top through Habit Tracking and Gamification</h1>
+        {% include 'includes/header.html' %}
 
-        <!-- Display player level and experience -->
+        <div class="calendar">
+            {% include 'includes/calendar.html' %}
+        </div>
+
+        <div class="habits">
+            <h2>Your Habits:</h2>
+            {% include 'includes/habits.html' %}
+        </div>
+
+        <div class="add-habit">
+            <h2>Add a New Habit:</h2>
+            <form action="{{ url_for('add_habit') }}" method="post">
+                <select name="habit_index" required>
+                    {% for index, habit in enumerate(top_habits) %}
+                        <option value="{{ index }}">{{ habit }}</option>
+                    {% endfor %}
+                </select>            
+                <button type="submit">Add Habit</button>
+            </form>
+        </div>
+
         <div class="level-container">
             <span>Level: {{ player.get_level() }}</span>
             <span>Experience: {{ player.get_experience() }}</span>
         </div>
-
-        <h2>Your Habits:</h2>
-
-        <ul>
-            {% for habit in habits %}
-            <li>
-                <input type="checkbox" id="habit_{{ habit[0] }}" {% if habit[2] == 1 %}checked{% endif %} onchange="deleteHabit('{{ habit[0] }}')">
-                <label for="habit_{{ habit[0] }}">{{ habit[1] }}</label>
-            </li>
-            {% endfor %}
-        </ul>
-
-        <h2>Add a New Habit:</h2>
-
-        <form action="{{ url_for('add_habit') }}" method="post">
-            <select name="habit_index" required>
-                {% for index, habit in enumerate(top_habits) %}
-                    <option value="{{ index }}">{{ habit }}</option>
-                {% endfor %}
-            </select>            
-            <button type="submit">Add Habit</button>
-        </form>        
+            
+        {% include 'includes/footer.html' %}
     </div>
 </body>
 </html>

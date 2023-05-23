@@ -1,0 +1,8 @@
+<ul>
+    {% for habit in habits %}
+    <li>
+        <input type="checkbox" id="habit_{{ habit[0] }}" {% if habit[2] == 1 %}checked{% endif %} onchange="deleteHabit('{{ habit[0] }}')">
+        <label for="habit_{{ habit[0] }}">{{ habit[1] }}</label>
+    </li>
+    {% endfor %}
+</ul>
