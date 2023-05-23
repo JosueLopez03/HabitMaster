@@ -1,46 +1,5 @@
-<!DOCTYPE html>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>HabitMaster - Calendar</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
-<body>
-    <div class="container">
-        <h1>Calendar</h1>
-        <h2>{{ month_name }} {{ year }}</h2>
-        
-        <table>
-            <thead>
-                <tr>
-                    <th>Sun</th>
-                    <th>Mon</th>
-                    <th>Tue</th>
-                    <th>Wed</th>
-                    <th>Thu</th>
-                    <th>Fri</th>
-                    <th>Sat</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for week in weeks %}
-                <tr>
-                    {% for day in week %}
-                    <td class="{% if day.month != month %}other-month{% endif %}">
-                        <div class="day">
-                            <span class="date">{{ day.day }}</span>
-                            {% for habit in habits %}
-                                {% if day.date() == habit[3] %}
-                                    <span class="habit">{{ habit[1] }}</span>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </td>
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+{% include 'includes/header.html' %}
+        {% include 'includes/calendar.html' %}
     </div>
 </body>
 <head>
@@ -126,14 +85,7 @@
 
         <h2>Your Habits:</h2>
 
-        <ul>
-            {% for habit in habits %}
-            <li>
-                <input type="checkbox" id="habit_{{ habit[0] }}" {% if habit[2] == 1 %}checked{% endif %} onchange="deleteHabit('{{ habit[0] }}')">
-                <label for="habit_{{ habit[0] }}">{{ habit[1] }}</label>
-            </li>
-            {% endfor %}
-        </ul>
+        {% include 'includes/habits.html' %}
 
         <h2>Add a New Habit:</h2>
 
@@ -145,6 +97,4 @@
             </select>            
             <button type="submit">Add Habit</button>
         </form>        
-    </div>
-</body>
-</html>
+{% include 'includes/footer.html' %}

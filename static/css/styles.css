@@ -59,6 +59,7 @@ button:hover {
     background-color: #45a049;
 }
 
+
 /* styles for player level and experience */
 .level-container {
     margin-top: 20px;
@@ -68,6 +69,7 @@ button:hover {
 .level-container span {
     margin-right: 10px;
 }
+
 
 /* ... style for calendar ... */
 

@@ -1,0 +1,31 @@
+<table>
+    <thead>
+        <tr>
+            <th>Sun</th>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for week in weeks %}
+        <tr>
+            {% for day in week %}
+            <td class="{% if day.month != month %}other-month{% endif %}">
+                <div class="day">
+                    <span class="date">{{ day.day }}</span>
+                    {% for habit in habits %}
+                        {% if day.date() == habit[3] %}
+                            <span class="habit">{{ habit[1] }}</span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
