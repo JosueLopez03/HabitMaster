@@ -1,29 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>HabitMaster</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .header {
-            margin-bottom: 20px;
-        }
-        .calendar {
-            margin-bottom: 20px;
-        }
-        .habits,
-        .add-habit {
-            margin-top: auto;
-            margin-bottom: 20px;
-        }
-    </style>
+    {% include 'includes/header.html' %}
+</head>
+<body>
+    <div class="tabs">
+        {% include 'includes/tab1.html' %}
+
+    {% include 'includes/tab2.html' %}
+
+    {% include 'includes/tab3.html' %}
+    </div>
+
     <script>
         function deleteHabit(habitId) {
             // Send an AJAX request to delete the habit
@@ -56,39 +44,22 @@
                 console.error('Error:', error);
             });
         }
-    </script>    
-</head>
-<body>
-    <div class="container">
-        {% include 'includes/header.html' %}
 
-        <div class="calendar">
-            {% include 'includes/calendar.html' %}
-        </div>
+        function openTab(tabIndex) {
+            // Get all tab buttons and tab contents
+            var tabButtons = document.getElementsByClassName('tab-button');
+            var tabContents = document.getElementsByClassName('tab-content');
 
-        <div class="habits">
-            <h2>Your Habits:</h2>
-            {% include 'includes/habits.html' %}
-        </div>
+            // Remove the 'active' class from all tab buttons and tab contents
+            for (var i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].classList.remove('active');
+                tabContents[i].style.display = 'none';
+            }
 
-        <div class="add-habit">
-            <h2>Add a New Habit:</h2>
-            <form action="{{ url_for('add_habit') }}" method="post">
-                <select name="habit_index" required>
-                    {% for index, habit in enumerate(top_habits) %}
-                        <option value="{{ index }}">{{ habit }}</option>
-                    {% endfor %}
-                </select>            
-                <button type="submit">Add Habit</button>
-            </form>
-        </div>
-
-        <div class="level-container">
-            <span>Level: {{ player.get_level() }}</span>
-            <span>Experience: {{ player.get_experience() }}</span>
-        </div>
-            
-        {% include 'includes/footer.html' %}
-    </div>
+            // Add the 'active' class to the selected tab button and display the corresponding tab content
+            tabButtons[tabIndex - 1].classList.add('active');
+            tabContents[tabIndex - 1].style.display = 'block';
+        }
+    </script>
 </body>
 </html>

@@ -1,0 +1,33 @@
+<div class="tab" id="tab3">
+        <button class="tab-button" onclick="openTab(3)">Add Habit</button>
+        <div class="tab-content">
+            <div class="habits">
+                <h2>Your Habits:</h2>
+                <ul>
+                    {% for habit in habits %}
+                    <li>
+                        <input type="checkbox" id="habit_{{ habit[0] }}" {% if habit[2] == 1 %}checked{% endif %} onchange="deleteHabit('{{ habit[0] }}')">
+                        <label for="habit_{{ habit[0] }}">{{ habit[1] }}</label>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="add-habit">
+                <h2>Add a New Habit:</h2>
+                <form action="/add" method="post">
+                    <select name="habit_index" required>
+                        <option value="0">Exercise for 60 minutes</option>
+                        <option value="1">Eat a balanced meal</option>
+                        <option value="2">Drink the recommended amount of water</option>
+                        <option value="3">Sleep for 7-9 hours</option>
+                        <option value="4">Practice a stress management activity</option>
+                        <option value="5">Practice good hygiene</option>
+                        <option value="6">Limit social media</option>
+                        <option value="7">Engage in a hobby for 30 minutes</option>
+                        <option value="8">Practice a new skill</option>
+                    </select>
+                    <button type="submit">Add Habit</button>
+                </form>
+            </div>
+        </div>
+    </div>
